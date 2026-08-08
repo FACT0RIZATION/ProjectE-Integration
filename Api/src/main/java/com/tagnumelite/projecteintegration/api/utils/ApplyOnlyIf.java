@@ -23,10 +23,6 @@ package com.tagnumelite.projecteintegration.api.utils;
 
 import com.tagnumelite.projecteintegration.api.plugin.OnlyIf;
 import net.minecraftforge.fml.common.ModContainer;
-import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion;
-import net.minecraftforge.fml.common.versioning.VersionParser;
-import net.minecraftforge.fml.common.versioning.VersionRange;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * The class that contains the logic for {@link OnlyIf}
@@ -42,26 +38,6 @@ public final class ApplyOnlyIf {
      * @return A boolean that denotes whether modContainer is to specification of onlyIf
      */
     public static boolean apply(OnlyIf onlyIf, ModContainer modContainer) {
-        String mod_version = modContainer.getVersion();
-        if (!StringUtils.isEmpty(onlyIf.version())) {
-            VersionRange onlyifRange = VersionParser.parseRange(onlyIf.version());
-            if (new DefaultArtifactVersion(modContainer.getModId(), onlyifRange).containsVersion(modContainer.getProcessedVersion())) {
-                return false;
-            }
-        }
-        if (!StringUtils.isEmpty(onlyIf.versionStartsWith().trim())) {
-            if (!mod_version.startsWith(onlyIf.versionStartsWith())) {
-                return false;
-            }
-        }
-        String versionEndsWith = onlyIf.versionEndsWith().trim();
-        if (!StringUtils.isEmpty(versionEndsWith)) {
-            // Is the version compare string starting with a '!'. Then we assume that we must invert the comparision
-            boolean invert = versionEndsWith.charAt(0) == '!';
-            // Remove the '!' from string if it starts with it
-            versionEndsWith = invert ? versionEndsWith.substring(1) : versionEndsWith;
-            return invert != mod_version.endsWith(versionEndsWith);
-        }
         return true;
     }
 }
